@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-from .models import Course, Theme, Paragraph, CourseLevel, Spec
+from .models import Course, Theme, Paragraph, CourseLevel, Spec, LevelSpec
 
 class ParagraphSerializer(ModelSerializer):
     class Meta:
@@ -20,7 +20,13 @@ class SpecSerializer(ModelSerializer):
         model = Spec
         fields = '__all__'
 
+class LevelSpecSerializer(ModelSerializer):
+    class Meta:
+        model = LevelSpec
+        fields = '__all__'
+
 class CourseLevelSerializer(ModelSerializer):
+    specs = LevelSpecSerializer(many=True, read_only=True)
     class Meta:
         model = CourseLevel
         fields = '__all__'

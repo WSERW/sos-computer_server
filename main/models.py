@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.core.validators import MaxValueValidator, MinValueValidator
 # Create your models here.
 
 
@@ -90,12 +90,27 @@ class CourseLevel(models.Model):
         ('advanced', 'Продвинутый'),
         ('expert', 'Экспертный'),
     ]
+    name = models.CharField(max_length=200, default='Курс', verbose_name='Название уровня')
     level = models.CharField(
         choices=LEVELS, max_length=50, default='base', verbose_name='Уровень')
     price = models.DecimalField(
         max_digits=10, decimal_places=2, verbose_name='Стоимость')
+    discount = models.IntegerField(default=0, validators=[MinValueValidator(0),MaxValueValidator(100)],verbose_name='Скидка')
     course = models.ForeignKey(
         Course, related_name='levels', on_delete=models.CASCADE, verbose_name='Курс')
 
     def __str__(self):
         return self.level
+
+class LevelSpec(models.Model):
+
+    class Meta:
+        verbose_name = "Спецификация"
+        verbose_name_plural = "Спецификации"
+
+    text = models.TextField(default='', verbose_name='Спецификация')
+    level = models.ForeignKey(
+        CourseLevel, related_name='specs', on_delete=models.CASCADE, verbose_name='Уровень')
+
+    def __str__(self):
+        return self.text
