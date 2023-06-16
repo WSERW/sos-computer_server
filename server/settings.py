@@ -45,7 +45,8 @@ INSTALLED_APPS = [
 
     'corsheaders',
     'rest_framework',
-    'nested_inline',
+    'nested_admin',
+    'import_export',
 
     'main',
 ]

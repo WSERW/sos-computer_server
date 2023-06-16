@@ -1,8 +1,11 @@
 from django.contrib import admin
 from django.template.loader import get_template
-from nested_inline.admin import NestedStackedInline, NestedModelAdmin
+from nested_admin import NestedStackedInline, NestedModelAdmin
+from import_export.admin import ImportExportMixin, ExportActionMixin
+
 
 from .models import Course, Theme, Paragraph, CourseLevel, Spec, LevelSpec
+from .resources import CourseResource
 
 # Register your models here.
 
@@ -33,9 +36,17 @@ class SpecInline(NestedStackedInline):
     # fields = '__all__'
     extra = 1
 
-class CourseAdmin(NestedModelAdmin):
+class CourseAdmin(ImportExportMixin,NestedModelAdmin):
     inlines = SpecInline, CourseLevelInline, ThemeInline,
     # fields = '__all__'
+    resource_class = CourseResource
+    # # Подключаем ресурс для импорта
+    # def get_import_resource_class(self):
+    #     return CourseResource
+
+    # # Подключаем ресурс для экспорта
+    # def get_export_resource_class(self):
+    #     return CourseResource
 
 
 admin.site.register(Course, CourseAdmin)
