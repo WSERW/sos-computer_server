@@ -24,6 +24,8 @@ class Course(models.Model):
                               blank=True, verbose_name='Оболожка')
     demo = models.BooleanField(default=False, verbose_name='Демонстрационный')
 
+    is_active = models.BooleanField(default=True, verbose_name='Доступный')
+
     def __str__(self):
         return f'{self.name}'
 

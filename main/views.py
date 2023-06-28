@@ -21,6 +21,6 @@ def demo(request):
 
 @api_view(['GET'])
 def course(request, id):
-    course = get_object_or_404(Course, id=id)
+    course = get_object_or_404(Course, id=id, demo=False, is_active=True)
     serializer = CourseSerializer(course)
     return Response(serializer.data)

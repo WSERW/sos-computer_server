@@ -38,6 +38,8 @@ class SpecInline(NestedStackedInline):
 
 class CourseAdmin(ImportExportMixin,NestedModelAdmin):
     inlines = SpecInline, CourseLevelInline, ThemeInline,
+    list_display = ('name', 'tag', 'is_active')
+    list_filter = ('tag','demo','is_active',)
     # fields = '__all__'
     resource_class = CourseResource
     # # Подключаем ресурс для импорта
