@@ -3,6 +3,17 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 # Create your models here.
 
 
+class App(models.Model):
+    class Meta:
+        verbose_name = "Приложение"
+        verbose_name_plural = "Приложения"
+
+    name = models.TextField(default='', verbose_name='Приложение')
+
+    def __str__(self):
+        return self.name
+
+
 class Course(models.Model):
 
     class Meta:
@@ -17,11 +28,16 @@ class Course(models.Model):
     ]
 
     name = models.CharField(max_length=200, verbose_name='Название курса')
-    description = models.TextField(verbose_name='Описание', default='', blank=True)
+    description = models.TextField(
+        verbose_name='Описание', default='', blank=True)
     tag = models.CharField(choices=TAGS, max_length=50,
                            default='', blank=True, verbose_name='Тег')
     image = models.ImageField(default=None, null=True,
                               blank=True, verbose_name='Оболожка')
+    programm = models.FileField(default=None, null=True,
+                                blank=True, verbose_name='Программа курса', upload_to='pdfs/')
+    apps = models.ManyToManyField(App, default=None, null=True,
+                                  blank=True, verbose_name='Изучаемые приложения')
     demo = models.BooleanField(default=False, verbose_name='Демонстрационный')
 
     is_active = models.BooleanField(default=True, verbose_name='Доступный')
@@ -92,17 +108,20 @@ class CourseLevel(models.Model):
         ('advanced', 'Продвинутый'),
         ('expert', 'Экспертный'),
     ]
-    name = models.CharField(max_length=200, default='Курс', verbose_name='Название уровня')
+    name = models.CharField(max_length=200, default='Курс',
+                            verbose_name='Название уровня')
     level = models.CharField(
         choices=LEVELS, max_length=50, default='base', verbose_name='Уровень')
     price = models.DecimalField(
         max_digits=10, decimal_places=2, verbose_name='Стоимость')
-    discount = models.IntegerField(default=0, validators=[MinValueValidator(0),MaxValueValidator(100)],verbose_name='Скидка')
+    discount = models.IntegerField(default=0, validators=[MinValueValidator(
+        0), MaxValueValidator(100)], verbose_name='Скидка')
     course = models.ForeignKey(
         Course, related_name='levels', on_delete=models.CASCADE, verbose_name='Курс')
 
     def __str__(self):
         return self.level
+
 
 class LevelSpec(models.Model):
 

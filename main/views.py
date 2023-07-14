@@ -9,7 +9,7 @@ from .serializers import CourseSerializer
 
 @api_view(['GET'])
 def index(request):
-    courses = Course.objects.filter(demo=False)
+    courses = Course.objects.filter(demo=False, is_active=True)
     serializer = CourseSerializer(courses, many=True)
     return Response(serializer.data)
 
